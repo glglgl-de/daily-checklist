@@ -1,0 +1,8 @@
+#!/bin/bash
+cd `dirname $0`
+git -C j/ pull
+f=`date +%Y%m%d.md`
+cp -avn checklist.template j/"$f"
+git -C j/ add "$f"
+git -C j/ commit -m new "$f"
+git -C j/ push
