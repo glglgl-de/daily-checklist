@@ -2,7 +2,7 @@
 type: Checklist
 ---
 
-# today
+# %DATE%
 
 - [ ] A
 - [ ] B

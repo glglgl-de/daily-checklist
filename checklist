@@ -2,7 +2,8 @@
 cd `dirname $0`
 git -C j/ pull
 f=`date +%Y%m%d.md`
-cp -avn checklist.template j/"$f"
+d=`date +%Y-%m-%d`
+[ -e j/"$f" ] || sed -e 's/%DATE%/'"$d"'/' checklist.template >j/"$f"
 git -C j/ add "$f"
 git -C j/ commit -m new "$f"
 git -C j/ push
