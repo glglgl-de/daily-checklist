@@ -1,18 +1,11 @@
 #!/bin/bash
 
-# checklist_config needs to be set via environment.
-# It must be a base64 encoded JSON dict with the fields "URL" and "branch".
-# It can be set with an override file.
+dir="`dirname $0`"
 
-# Config
-echo "$checklist_config"
-cfg=`base64 --decode <<<"$checklist_config"`
-echo "$cfg"
-pick() { jq -r "$2" <<<"$1"; }
-URL=`pick "$cfg" '.["URL"]'`
-branch=`pick "$cfg" '.["branch"]'`
-
-# Prepare
+# Read config:
+pick() { jq -r "$1" <"$dir"/checklist.json; }
+URL=`pick '.["URL"]'`
+branch=`pick '.["branch"]'`
 
 # Prepare repo:
 r=`mktemp -d -t repo.XXXXXXXXXX`
@@ -22,7 +15,7 @@ git clone --depth=1 "$URL" --branch "$branch" "$r"
 # Generate file if it doesn't exist yet:
 f=`date +%Y%m%d.md`
 d=`date +%Y-%m-%d`
-[ -e "$r"/"$f" ] || sed -e 's/%DATE%/'"$d"'/' "`dirname $0`"/checklist.template >"$r"/"$f"
+[ -e "$r"/"$f" ] || sed -e 's/%DATE%/'"$d"'/' "$dir"/checklist.template >"$r"/"$f"
 
 # Add, commit, push:
 git -C "$r"/ add "$f"
