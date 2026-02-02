@@ -3,5 +3,7 @@ Description=Daily new checklist
 
 [Service]
 Type=oneshot
+PassEnvironment=checklist_config
+#Environment="checklist_config={}" can be set from an overlay.
 #ExecStartPre="env"
 ExecStart=%h/checklist/checklist
