@@ -2,15 +2,15 @@
 
 dir="`dirname $0`"
 
-# Read config:
-pick() { jq -r "$1" <"$dir"/checklist.json; }
-URL=`pick '.["URL"]'`
-branch=`pick '.["branch"]'`
+# config
+URL=$(jq -r '.URL' "$dir"/checklist.json)
+BRANCH_ARG=$(jq -r '.branch? // empty | "--branch " + .' "$dir"/checklist.json)
 
 # Prepare repo:
 r=`mktemp -d -t repo.XXXXXXXXXX`
 [ -z "$r" ] && exit 2
-git clone --depth=1 "$URL" --branch "$branch" "$r"
+
+git clone --depth=1 "$URL" $BRANCH_ARG "$r"
 
 # Generate file if it doesn't exist yet:
 f=`date +%Y%m%d.md`
